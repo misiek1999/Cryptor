@@ -26,8 +26,6 @@ public class FilesHelper {
         System.out.println("We start reading file");
         byte [] bt = null;
         try{
-          //BufferedInputStream in =  file.readAllLines(path);
-           // System.out.println( file.readAllLines(path));
             bt = Files.readAllBytes(path);
         } catch (IOException e)
         {
@@ -38,7 +36,6 @@ public class FilesHelper {
     }
 
     public void save (String toSave) {
-      //  byte [] bytes = toSave.getBytes();
         try{
             Files.write(path, toSave.getBytes());
         }   catch (IOException e)
