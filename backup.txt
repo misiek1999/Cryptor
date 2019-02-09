@@ -1,6 +1,1 @@
-bla bla bla
-hahaha
-17
-TXT.errpr
-THIS ID NOT DOS FILE
-END. Działaj
+Witam oto mój tekst

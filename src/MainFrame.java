@@ -1,19 +1,22 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.*;
+import java.io.File;
+
 
 public class MainFrame extends JFrame {
-    private JTextArea textArea;
-    private JScrollPane scrollTextArea;
+    private javax.swing.JTextArea textArea;
     private JButton encryptionButton;
     private JButton saveButton;
     private JButton decryptionButton;
     private JPanel MainPanel;
     private JTextField keyText;
+    private JScrollPane scrollTextArea;
 
+    private FilesHelper helper = new FilesHelper("backup.txt");
 
-    //private JTextArea textArea1;
 
     public MainFrame(){
         super("Hello");
@@ -21,37 +24,61 @@ public class MainFrame extends JFrame {
         setTitle("Better Than JS");
         setResizable(false);
         setSize(640,480);
-        //textArea = new TextArea();
-        //add(textArea);
-        //scrollTextArea.setVerticalScrollBarPolicy(scrollTextArea.VERTICAL_SCROLLBAR_AS_NEEDED);
-        textArea = new JTextArea();
-        textArea.setRows(30);
-        textArea.setColumns(64);
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        scrollTextArea = new JScrollPane(textArea,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        add(scrollTextArea);
+
+
+
         add(MainPanel);
-        //pack();
-        setVisible(true);
+
+
 
         addWindowListener(new listener());
+        decryptionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String temp = MyStringCrypto.decrypt(textArea.getText(),keyText.getText());
+                if (temp !=null){
+                    textArea.setText(temp);
+                }
+
+            }
+        });
+        setVisible(true);
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                helper.save(textArea.getText());
+                JFileChooser fileChooser  =new JFileChooser();
+                if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    helper = new FilesHelper(file.getPath());
+                    helper.save(textArea.getText());
+            }
+        }});
+
+
+        encryptionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String temp = MyStringCrypto.encrypt(textArea.getText(),keyText.getText());
+                if (temp !=null){
+                    textArea.setText(temp);
+                }
+            }
+        });
     }
-
-
-
     private class listener implements WindowListener{
 
 
        @Override
        public void windowOpened(WindowEvent e) {
-
+           //String text =  new String( helper.readAllFile());
+           textArea.setText(helper.readAllFile());
        }
 
        @Override
        public void windowClosing(WindowEvent e) {
-          // textArea.saveToFile();
+        helper.save(textArea.getText());
 
        }
 
@@ -80,5 +107,6 @@ public class MainFrame extends JFrame {
 
        }
    }
+
 
 }

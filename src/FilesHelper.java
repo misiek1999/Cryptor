@@ -1,9 +1,8 @@
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.nio.Buffer;
-import java.nio.file.*;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
-
+import java.nio.file.Path;
+import java.nio.file.Paths;
 public class FilesHelper {
     private Files file;
     private Path path;
@@ -23,13 +22,14 @@ public class FilesHelper {
     }
 
     public String readAllFile() {
-        System.out.println("We start reading file");
         byte [] bt = null;
+        String text = null;
         try{
             bt = Files.readAllBytes(path);
-        } catch (IOException e)
-        {
-            System.err.println("We found: "+e.toString());
+
+        }
+        catch (IOException e) {
+            System.err.println("We found problem: "+e.toString());
             System.exit(1999);
         }
         return new String(bt);
