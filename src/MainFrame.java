@@ -37,7 +37,7 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String temp = MyStringCrypto.decrypt(textArea.getText(),keyText.getText());
-                if (temp !=null){
+                if (!temp.isEmpty()){
                     textArea.setText(temp);
                 }
 
@@ -61,8 +61,9 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String temp = MyStringCrypto.encrypt(textArea.getText(),keyText.getText());
-                if (temp !=null){
+                if (!temp.isEmpty()){
                     textArea.setText(temp);
+
                 }
             }
         });
@@ -72,14 +73,12 @@ public class MainFrame extends JFrame {
 
        @Override
        public void windowOpened(WindowEvent e) {
-           //String text =  new String( helper.readAllFile());
            textArea.setText(helper.readAllFile());
        }
 
        @Override
        public void windowClosing(WindowEvent e) {
-        helper.save(textArea.getText());
-
+            helper.save(textArea.getText());
        }
 
        @Override
