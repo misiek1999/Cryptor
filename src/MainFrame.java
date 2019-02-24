@@ -7,13 +7,17 @@ import java.io.File;
 
 
 public class MainFrame extends JFrame {
-    private javax.swing.JTextArea textArea;
+    private JTextArea textEncrypt;
     private JButton encryptionButton;
     private JButton saveButton;
     private JButton decryptionButton;
     private JPanel MainPanel;
+    private JTextArea textDecrypt;
     private JTextField keyText;
-    private JScrollPane scrollTextArea;
+    private JScrollPane scrollEncrypt;
+    private JScrollPane scrollDecrypt;
+    private JToolBar toolBar;
+    private JButton saveToFileButton;
 
     private FilesHelper helper = new FilesHelper("backup.txt");
 
@@ -23,11 +27,21 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Better Than JS");
         setResizable(false);
-        setSize(640,480);
+        setSize(800,600);
 
-
-
-
+        InputMap inPut = MainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inPut.put(KeyStroke.getKeyStroke("ctrl shift pressed S"),"scs");
+        MainPanel.getActionMap().put("scs", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                helper.save(textDecrypt.getText());
+                JFileChooser fileChooser = new JFileChooser();
+                if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    helper = new FilesHelper(file.getPath());
+                    helper.save(textDecrypt.getText());
+                    }
+            }
+        });
         add(MainPanel);
 
 
@@ -36,33 +50,33 @@ public class MainFrame extends JFrame {
         decryptionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String temp = MyStringCrypto.decrypt(textArea.getText(),keyText.getText());
+                String temp = MyStringCrypto.decrypt(textDecrypt.getText(),keyText.getText());
                 if (!temp.isEmpty()){
-                    textArea.setText(temp);
+                    textEncrypt.setText(temp);
                 }
 
             }
         });
         setVisible(true);
-        saveButton.addActionListener(new ActionListener() {
+/*        saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                helper.save(textArea.getText());
+                helper.save(textDecrypt.getText());
                 JFileChooser fileChooser  =new JFileChooser();
                 if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
                     helper = new FilesHelper(file.getPath());
-                    helper.save(textArea.getText());
+                    helper.save(textDecrypt.getText());
             }
-        }});
+        }});        */
 
 
         encryptionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String temp = MyStringCrypto.encrypt(textArea.getText(),keyText.getText());
+                String temp = MyStringCrypto.encrypt(textEncrypt.getText(),keyText.getText());
                 if (!temp.isEmpty()){
-                    textArea.setText(temp);
+                    textDecrypt.setText(temp);
 
                 }
             }
@@ -73,12 +87,12 @@ public class MainFrame extends JFrame {
 
        @Override
        public void windowOpened(WindowEvent e) {
-           textArea.setText(helper.readAllFile());
+           textEncrypt.setText(helper.readAllFile());
        }
 
        @Override
        public void windowClosing(WindowEvent e) {
-            helper.save(textArea.getText());
+            helper.save(textEncrypt.getText());
        }
 
        @Override
