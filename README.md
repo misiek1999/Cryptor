@@ -1,3 +1,3 @@
 # notepad----
-My first java swing GUI project
+Cryptor for my cpp project's 
 Enjoy
